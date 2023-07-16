@@ -1,5 +1,5 @@
-# blockShooter
+# Block Shooter
 
-live at:
+live at:- **[Block Shooter](theflameguy.github.io/blockShooter)**
 
-theflameguy.github.io/blockShooter
+A simple block shooting game.
