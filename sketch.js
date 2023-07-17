@@ -7,20 +7,28 @@ var waitSet = 4;
 var score = 0;
 var enemyFreq = 30;  //more means less frequent
 var isDed = 0;
+var laserType=2;
 
 var gameState=0; //0-menu 1-playing 2-over
 
 function mouseClicked(){
   if(gameState==0)  gameState++;
   else if(gameState==1 && isDed==1) gameState++;
-  else if(gameState==2) gameState=0;
+  else if(gameState==2) {gameState=0; score=0;}
 }
 
 function setup() {
   // put setup code here
   //createCanvas(1536,859.3);  //full scr
   createCanvas(window.innerWidth, window.innerHeight);  //test scr
+
+
+  // localStorage.clear();
+
   ship = new Ship();
+  if(!localStorage.getItem("highScore")){
+    localStorage.setItem("highScore",0);
+  }
   // for(var i=0;i<20;i++)
   // powerup.push(new Powerup);
 }
@@ -32,15 +40,9 @@ function draw() {
   frameRate(60)
   // console.log(floor(frameRate()));
   if(gameState==0){
-    rectMode(CENTER);
-    fill(200,60)
-    stroke(255)
-    rect(width/2,height/2,200,50)
-    fill(255)
-    textSize(20)
-    noStroke();
-    textAlign(CENTER);
-    text("Click or Tap to Play",width/2,height/2+5)
+    //menu-screen
+    menuScreen();
+    
   }
   if(gameState==1)
   {  // noLoop();
@@ -65,7 +67,26 @@ function draw() {
 
     //shooting-laser adding
     if(mouseIsPressed && !(wait%waitSet) ) {
-      laser.push(new Laser3(ship)); 
+      let pos;
+      if(laserType==0){
+        pos = createVector(ship.pos.x,ship.pos.y);
+        laser.push(new Laser(pos)); 
+      }
+      if(laserType==1){
+        pos = createVector(ship.pos.x,ship.pos.y);
+        pos.x-=ship.r/5;
+        laser.push(new Laser(pos))
+        pos.x+=(2*ship.r/5);
+        laser.push(new Laser(pos));
+      }
+      if(laserType==2){
+        pos = createVector(ship.pos.x,ship.pos.y);
+        laser.push(new Laser(pos));
+        pos.x-=(2*ship.r/5);
+        laser.push(new Laser(pos));
+        pos.x+=(4*ship.r/5);
+        laser.push(new Laser(pos));
+      }
     }
 
     //laser rendering and removing
@@ -91,39 +112,32 @@ function draw() {
       }
     }
 
-
     //enemy-laser collision check
     enemyLaserColl();
 
     //elemy-ship collision check
     enemyShipColl()
 
-    // after-death
-    // let deathScreen=0;
-    // if(isDed){
-    //   resetGame()
-    // }
   }
+
   if(gameState==2){
     //death screen
-    rectMode(CENTER);
-    fill(200,60)
-    stroke(255);
-    rect(width/2,height/2,250,75)
-    textAlign(CENTER);
-    textSize(20)
-    console.log("gameState "+ gameState)
-    noStroke()
-    fill(255)
-    text("Your Score: "+score,width/2,height/2)
-    text("\nClick or Tap to Play again",
-          width/2,height/2)
-    
-    resetGame();
-
+    deathScreen();
   }
 }
 
+
+function menuScreen(){
+  rectMode(CENTER);
+  fill(200,60)
+  stroke(255)
+  rect(width/2,height/2,200,50)
+  fill(255)
+  textSize(20)
+  noStroke();
+  textAlign(CENTER);
+  text("Click or Tap to Play",width/2,height/2+5)
+}
 
 
 
@@ -156,6 +170,7 @@ function enemyShipColl(){
       console.log("ded")
       isDed = 1;
       gameState=2;
+      localStorage.setItem("highScore", Math.max(score,localStorage.getItem("highScore")));
     }
   }
 }
@@ -179,10 +194,31 @@ function enemyLaserColl(){
 }
 
 function resetGame(){
-  score=0;
+  
   laser.splice(0,laser.length);
   enemy.splice(0,enemy.length);
   isDed=0;
+
+}
+
+function deathScreen(){
+  rectMode(CENTER);
+  fill(200,60)
+  stroke(255);
+  rect(width/2,height/2,250,75)
+  textAlign(CENTER);
+  console.log("gameState "+ gameState)
+  noStroke()
+  fill(250,100,20);
+  textSize(30)
+  text("High Score: "+(localStorage.getItem("highScore")),width/2,35)
+  fill(255)
+  textSize(20)
+  text("Your Score: "+score,width/2,height/2-10)
+  text("\nClick or Tap to Play again",
+        width/2,height/2)
+  
+  resetGame();
 
 }
 
