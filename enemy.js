@@ -3,7 +3,7 @@ class Enemy{
 
   constructor(){
     this.r = random(17,27);
-    this.health = 5;
+    this.health = 1;
     this.freq = 30; 
     this.pos = createVector(random(27,width-27),random(-10,-900));
     this.vel = createVector(random(-1,1),random(2,5));
@@ -11,9 +11,9 @@ class Enemy{
   }
   
   render(){
-    let r = map(this.health,0,5,0,255);
-    let g = map(this.health,0,5,0,255);
-    let b = map(this.health,0,5,0,255);
+    let r = map(this.health,0,1,0,255);
+    let g = map(this.health,0,1,0,255);
+    let b = map(this.health,0,1,0,255);
     fill(r,0,b);
     stroke(255);
       ellipse(this.pos.x,this.pos.y,this.r);
@@ -34,13 +34,16 @@ class Enemy1 extends Enemy{
   
   constructor(){
     super();
-    this.health = 1;
+    this.health = 2;
     this.freq = 60;
   }
 
   render(){
+    let r = map(this.health,0,2,0,255);
+    let g = map(this.health,0,2,0,255);
+    let b = map(this.health,0,2,0,255);
+    fill(r,0,b/2);
     stroke(255,0,255);
-    noFill();
     rectMode(CENTER);
     rect(this.pos.x,this.pos.y,this.r,this.r);
   }
@@ -51,15 +54,15 @@ class Enemy2 extends Enemy{
   
   constructor(){
     super();
-    this.health = 2;
+    this.health = 4;
     this.freq = 120;
   }
 
   render(){
-    let r = map(this.health,0,2,0,255);
-    let g = map(this.health,0,2,0,255);
-    let b = map(this.health,0,2,0,255);
-    fill(r,0,b);
+    let r = map(this.health,0,4,0,255);
+    let g = map(this.health,0,4,0,255);
+    let b = map(this.health,0,4,0,255);
+    fill(r,g,b/2);
     stroke(255);
     //noFill();
     beginShape();
@@ -76,15 +79,15 @@ class Enemy3 extends Enemy{
   
   constructor(){
     super();
-    this.health = 3;
+    this.health = 6;
     this.freq = 240;
   }
 
   render(){
-    let r = map(this.health,0,2,0,255);
-    let g = map(this.health,0,2,0,255);
-    let b = map(this.health,0,2,0,255);
-    fill(0,g,b);
+    let r = map(this.health,0,6,0,255);
+    let g = map(this.health,0,6,0,255);
+    let b = map(this.health,0,6,0,255);
+    fill(0,g/3,b);
     stroke(255);
     //noFill();
     beginShape();

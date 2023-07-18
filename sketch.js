@@ -1,4 +1,5 @@
 var ship;
+var level;
 var enemy = [];
 var laser = [];
 var powerup = [];
@@ -7,7 +8,7 @@ var waitSet = 4;
 var score = 0;
 var enemyFreq = 30;  //more means less frequent
 var isDed = 0;
-var laserType=2;
+var laserType=0;
 
 var gameState=0; //0-menu 1-playing 2-over
 
@@ -26,6 +27,8 @@ function setup() {
   // localStorage.clear();
 
   ship = new Ship();
+  level = new Level(ship);
+  level.preRender();
   if(!localStorage.getItem("highScore")){
     localStorage.setItem("highScore",0);
   }
@@ -36,7 +39,7 @@ function setup() {
 function draw() {
   // put drawing code here
 
-  background('#373B6E');
+  background(30,40,50);
   frameRate(60)
   // console.log(floor(frameRate()));
   if(gameState==0){
@@ -48,6 +51,7 @@ function draw() {
   {  // noLoop();
     // setTimeout(redraw, 10);
 
+    level.render();
     ship.render();
     
     // score-board
@@ -56,13 +60,12 @@ function draw() {
     textSize(30)
     text(score,width-30,30,40,40)
     
-    // for(var i=0;i<powerup.length;i++){
-      //   powerup[i].render();
-      //   powerup[i].move();
-    // }
+    powerupRender();
+
+    
       
     //non-continous lasers
-      wait++;
+      wait++; //game time
       wait%=enemyFreq;
 
     //shooting-laser adding
@@ -79,7 +82,7 @@ function draw() {
         pos.x+=(2*ship.r/5);
         laser.push(new Laser(pos));
       }
-      if(laserType==2){
+      if(laserType>=2){
         pos = createVector(ship.pos.x,ship.pos.y);
         laser.push(new Laser(pos));
         pos.x-=(2*ship.r/5);
@@ -95,20 +98,31 @@ function draw() {
     //enemy rendering and removing
     enemyRender()
 
-    //enemy incoming
+    //timing-events
+
+
+    //Scoring events
     if(score >= 0){  
       if(!isDed && !(wait%enemyFreq) ){
-        enemy.push(new Enemy3());
+        enemy.push(new Enemy());
       }
     }
     if(score >=20){
       if(!isDed && !(wait%enemyFreq) ){
-        enemy.push(new Enemy2());
+        enemy.push(new Enemy1());
+      }
+      if(powerup.length==0 && laserType <4){
+        powerup.push(new Powerup)
       }
     }
     if(score >=30){
       if(!isDed && !(wait%enemyFreq) ){
-        enemy.push(new Enemy());
+        enemy.push(new Enemy2());
+      }
+    }
+    if(score >=50){
+      if(!isDed && !(wait%enemyFreq) ){
+        enemy.push(new Enemy3());
       }
     }
 
@@ -117,6 +131,8 @@ function draw() {
 
     //elemy-ship collision check
     enemyShipColl()
+    //elemy-ship collision check
+    powerupShipColl()
 
   }
 
@@ -161,13 +177,22 @@ function enemyRender(){
   }
 }
 
+function powerupRender(){
+  for(var i=0;i<powerup.length;i++){
+      powerup[i].render();
+      powerup[i].move();
+      if(powerup[i].pos.y>height)
+        powerup.splice(i,1);
+  }
+}
+
 
 function enemyShipColl(){
   for(let i=0;i<enemy.length;i++){
     var dis2;
     dis2=dist(ship.pos.x,ship.pos.y,enemy[i].pos.x,enemy[i].pos.y);
     if(dis2<(ship.r/2)+(enemy[i].r)){
-      console.log("ded")
+      // console.log("ded")
       isDed = 1;
       gameState=2;
       localStorage.setItem("highScore", Math.max(score,localStorage.getItem("highScore")));
@@ -193,6 +218,19 @@ function enemyLaserColl(){
   }
 }
 
+function powerupShipColl(){
+  for(let i=0;i<powerup.length;i++){
+    var dis2;
+    dis2=dist(ship.pos.x,ship.pos.y,powerup[i].pos.x,powerup[i].pos.y);
+    if(dis2<(ship.r/2)+(powerup[i].r)){
+      // console.log("THI-dingg")
+      laserType++;
+      powerup.splice(i,1);
+    }
+  }
+
+}
+
 function resetGame(){
   
   laser.splice(0,laser.length);
@@ -207,7 +245,7 @@ function deathScreen(){
   stroke(255);
   rect(width/2,height/2,250,75)
   textAlign(CENTER);
-  console.log("gameState "+ gameState)
+  // console.log("gameState "+ gameState)
   noStroke()
   fill(250,100,20);
   textSize(30)
