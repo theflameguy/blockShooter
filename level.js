@@ -22,20 +22,20 @@ class Level{
         //mousex=noise(xof)*width*scl
         //mousey=noise(yof)*height*scl
         for(var i=0;i<this.n/3;i++){
-            var xoff=map(mousex,width/2,width,0,width/8)
-            var yoff=map(mousey,width/2,width,0,width/8)
+            var xoff=map(mousex,width/2,width,0,width/4)
+            var yoff=map(mousey,width/2,width,0,width/4)
             strokeWeight(0.5);
             point(this.ptsX[i]+xoff,this.ptsY[i]+yoff) 
         }
         for(var i=this.n/3;i<2*this.n/3;i++){
-            var xoff=map(mousex,width/2,width,0,width/16)
-            var yoff=map(mousey,width/2,width,0,width/16)
+            var xoff=map(mousex,width/2,width,0,width/8)
+            var yoff=map(mousey,width/2,width,0,width/8)
             strokeWeight(1);
             point(this.ptsX[i]+xoff,this.ptsY[i]+yoff) 
         }
         for(var i=2*this.n/3;i<this.n;i++){
-            var xoff=map(mousex,width/2,width,0,width/32)
-            var yoff=map(mousey,width/2,width,0,width/32)
+            var xoff=map(mousex,width/2,width,0,width/16)
+            var yoff=map(mousey,width/2,width,0,width/16)
             strokeWeight(2);
             point(this.ptsX[i]+xoff,this.ptsY[i]+yoff) 
         }

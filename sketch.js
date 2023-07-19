@@ -235,6 +235,8 @@ function resetGame(){
   
   laser.splice(0,laser.length);
   enemy.splice(0,enemy.length);
+  powerup.splice(0,powerup.length);
+  laserType=0;
   isDed=0;
 
 }
