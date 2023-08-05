@@ -3,6 +3,7 @@
 Try here:- **[Block Shooter](https://theflameguy.github.io/blockShooter/)**
 
 A simple block shooting game 🚀 ☄.<br>
+Mobile ready 📱
 
 With power ups 💫 and Saves your high score 💯 on your local storage.
 
